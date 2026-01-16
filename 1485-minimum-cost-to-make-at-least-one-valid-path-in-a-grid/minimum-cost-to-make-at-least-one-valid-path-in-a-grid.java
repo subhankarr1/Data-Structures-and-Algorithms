@@ -1,30 +1,29 @@
-class tuple {
+class tuple implements Comparable<tuple> {
     int row, col, cost;
     tuple(int row, int col, int cost) {
         this.row = row;
         this.col = col;
         this.cost = cost;
     }
-}
+    public int compareTo(tuple others) {
+        return this.cost - others.cost;
+    }
+} 
+
 class Solution {
     public int minCost(int[][] grid) {
-
         int n = grid.length, m = grid[0].length;
         int[][] dist = new int[n][m];
-        for(int i = 0; i < n; i++) {
-            for(int j = 0; j < m; j++) {
-                dist[i][j] = (int)(1e9);
-            }
-        }
-        Deque<tuple> dq = new ArrayDeque<>();
-        dq.offerFirst(new tuple(0,0,0));
+        for(int[] i: dist) Arrays.fill(i, (int)(1e9));
+        PriorityQueue<tuple> pq = new PriorityQueue<>();
+        pq.add(new tuple(0,0,0));
         dist[0][0] = 0;
 
-        int[] dr = {0, 0, 1, -1};
-        int[] dc = {1, -1, 0, 0};
+        int[] dr = {0, 0, +1, -1};
+        int[] dc = {+1, -1, 0, 0};
 
-        while(!dq.isEmpty()) {
-            tuple it = dq.pollFirst();
+        while(!pq.isEmpty()) {
+            tuple it = pq.poll();
             int row = it.row;
             int col = it.col;
             int cost = it.cost;
@@ -36,17 +35,14 @@ class Solution {
                 int nc = col + dc[i];
 
                 if(nr >= 0 && nr < n && nc >= 0 && nc < m) {
-                    int addCost = (grid[row][col] == i+1) ? 0 : 1;
-                    int newCost = cost + addCost;
-
-                    if(newCost < dist[nr][nc]) {
-                        dist[nr][nc] = newCost;
-                        if(addCost == 0) dq.offerFirst(new tuple(nr, nc, newCost));
-                        else dq.offerLast(new tuple(nr, nc, newCost)); 
+                    int newCost = (grid[row][col] == i+1) ? 0 : 1;
+                    if(cost + newCost < dist[nr][nc]) {
+                        dist[nr][nc] = cost + newCost;
+                        pq.add(new tuple(nr, nc, dist[nr][nc]));
                     }
                 }
             }
-        }
-        return dist[n-1][m-1];
+         }
+         return dist[n-1][m-1];
     }
 }
