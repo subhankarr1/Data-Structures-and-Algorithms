@@ -14,9 +14,9 @@ class Solution {
             if(v == parent) continue;
             DFS(v, u, adj, need, ans);
             if(need[v] == 1) {
-                ans.add(originalInd);
                 need[v] ^= 1;
                 need[u] ^= 1;
+                ans.add(originalInd);
             }
         }
     }
