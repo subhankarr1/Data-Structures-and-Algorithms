@@ -12,8 +12,6 @@ class Solution {
                 mini2 = curr;
             }
         }
-        cost += mini1;
-        cost += mini2;
-        return cost;
+        return cost + mini1 + mini2;
     }
 }
