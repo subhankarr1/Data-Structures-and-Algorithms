@@ -2,16 +2,28 @@
  * @param {number[]} nums
  * @return {number}
  */
-var findUnsortedSubarray = function(nums) {
-    let n = nums.length, l = n, r = -1;
-    let sorted = [...nums].sort((a,b) => a-b);
+var findUnsortedSubarray = function (nums) {
+    let n = nums.length, maxs = nums[0], mins = nums[n - 1], l = -1, r = -1;
 
-    for(let i = 0; i < n; i++) {
-      if(nums[i] !== sorted[i]){
-        l = Math.min(l, i);
-        r = Math.max(r, i);
-      }
+    for (let j = n - 2; j >= 0; j--) {
+        if (mins < nums[j]) {
+            l = j;
+        }
+        else {
+            mins = nums[j];
+        }
     }
-    if(l > r) return 0;
-    return r-l+1;
+
+    for (let i = 1; i < n; i++) {
+        if (maxs > nums[i]) {
+            r = i;
+        }
+        else {
+            maxs = nums[i];
+        }
+    }
+    if (l == -1) return 0;
+    return r - l + 1;
+
+
 };
